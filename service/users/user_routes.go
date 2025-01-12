@@ -29,6 +29,7 @@ func (h *UserHandler) handleRegister(w http.ResponseWriter, r *http.Request) {
 
 	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
 		http.Error(w, "payload error", http.StatusBadRequest)
+		return
 	}
 
 	if payload.Password != payload.PasswordConfirm {
@@ -45,5 +46,6 @@ func (h *UserHandler) handleRegister(w http.ResponseWriter, r *http.Request) {
 
 	if err := h.userStore.CreateUser(user); err != nil {
 		log.Print(err.Error())
+		return
 	}
 }
