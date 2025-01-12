@@ -2,7 +2,7 @@ package users
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/TravyTheDev/job-matching/service/types"
@@ -19,6 +19,7 @@ func NewUserHandler(userStore types.UserStore) *UserHandler {
 	}
 }
 
+// todo i18n error handling
 func (h *UserHandler) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/register", h.handleRegister).Methods("POST")
 }
@@ -41,8 +42,8 @@ func (h *UserHandler) handleRegister(w http.ResponseWriter, r *http.Request) {
 		Email:    payload.Email,
 		Role:     payload.Role,
 	}
-	fmt.Println(user)
+
 	if err := h.userStore.CreateUser(user); err != nil {
-		fmt.Println(err)
+		log.Print(err.Error())
 	}
 }
