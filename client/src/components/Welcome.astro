@@ -1,0 +1,26 @@
+---
+
+---
+
+<div>
+	<h1>HI</h1>
+	<input type="file" name="file" id="file">
+	<button id="btn">upload</button>
+</div>
+
+<script>
+	const btn = document.getElementById('btn')
+	const file = document.getElementById('file') as HTMLInputElement
+	const uploadFile = async (e: Event) => {
+		e.preventDefault()
+		const payload = new FormData()
+		if (file.files){
+			payload.append('file', file.files[0])
+		}
+		await fetch('http://localhost:8000/api/v1/upload/1', {
+			method: "POST",
+			body: payload,
+		})
+	}
+	btn?.addEventListener('click', uploadFile)
+</script>

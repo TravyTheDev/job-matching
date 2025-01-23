@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/TravyTheDev/job-matching/service/upload"
 	"github.com/TravyTheDev/job-matching/service/users"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
@@ -27,7 +28,7 @@ func (s *APIServer) Run() error {
 	subRouter := router.PathPrefix("/api/v1").Subrouter()
 
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost"},
+		AllowedOrigins:   []string{"http://localhost:4321"},
 		AllowCredentials: true,
 		AllowedMethods:   []string{"OPTIONS", http.MethodGet, http.MethodPost, http.MethodDelete, http.MethodPut, http.MethodPatch},
 	})
@@ -37,6 +38,9 @@ func (s *APIServer) Run() error {
 	userStore := users.NewUserStore(s.db)
 	userHander := users.NewUserHandler(userStore)
 	userHander.RegisterRoutes(subRouter)
+
+	uploadHandler := upload.NewUploadHandler()
+	uploadHandler.RegisterRoutes(subRouter)
 
 	fmt.Printf("Listening on %s\n", s.addr)
 	return http.ListenAndServe(s.addr, handler)
